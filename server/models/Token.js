@@ -1,6 +1,6 @@
-const pool = require('../config/database');
-const crypto = require('crypto');
 
+import crypto from 'crypto';
+import pool from '../config/database.js'
 class Token {
   // Create a new token (for email verification or password reset)
   static async create(userId, type, expiresInMinutes = 60) {
@@ -61,4 +61,4 @@ class Token {
   }
 }
 
-module.exports = Token;
+export default Token;

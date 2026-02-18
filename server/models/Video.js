@@ -1,4 +1,4 @@
-const pool = require('../config/database');
+import pool from '../config/database.js';
 
 class Video {
   static async create(videoData) {
@@ -122,4 +122,4 @@ class Video {
   }
 }
 
-module.exports = Video;
+export default Video;

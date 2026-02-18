@@ -1,5 +1,5 @@
-const Token = require('../models/Token');
-const Session = require('../models/Session');
+import Token from '../models/Token.js';
+import Session from '../models/Session.js';
 
 // Cleanup expired tokens and sessions
 const cleanupExpiredData = async () => {
@@ -8,7 +8,7 @@ const cleanupExpiredData = async () => {
     await Session.cleanupExpired();
     console.log('✓ Cleaned up expired tokens and sessions');
   } catch (error) {
-    console.error('Cleanup error:', error);
+    console.error('Cleanup error:', error.message);
   }
 };
 
@@ -17,8 +17,8 @@ const setupCleanupJobs = () => {
   // Run cleanup every hour
   setInterval(cleanupExpiredData, 60 * 60 * 1000);
   
-  // Run initial cleanup on startup
-  cleanupExpiredData();
+  // Run initial cleanup after 10 seconds (give DB time to connect)
+  setTimeout(cleanupExpiredData, 10000);
 };
 
-module.exports = { setupCleanupJobs, cleanupExpiredData };
+export { setupCleanupJobs, cleanupExpiredData };

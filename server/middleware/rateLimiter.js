@@ -1,5 +1,5 @@
-const rateLimit = require('express-rate-limit');
-const logger = require('../utils/logger');
+import rateLimit from 'express-rate-limit';
+import logger from '../utils/logger.js';
 
 // In-memory store (for development)
 const rateLimitStore = new Map();
@@ -80,4 +80,4 @@ const createRateLimiter = (options = {}) => {
   });
 };
 
-module.exports = createRateLimiter;
+export default createRateLimiter;

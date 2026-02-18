@@ -1,20 +1,28 @@
-const { Pool } = require('pg');
-require('dotenv').config();
+import pkg from 'pg';
+const { Pool } = pkg;
+import dotenv from 'dotenv';
 
-// Create PostgreSQL connection pool
+dotenv.config();
+
+// Supabase connection using pg Pool
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  ssl: { rejectUnauthorized: false }
 });
 
-// Test database connection
 pool.on('connect', () => {
-  console.log('✓ Connected to PostgreSQL database');
+  console.log('✓ Connected to Supabase PostgreSQL database');
 });
 
 pool.on('error', (err) => {
-  console.error('Unexpected error on idle client', err);
-  process.exit(-1);
+  console.error('Database connection error:', err.message);
 });
 
-module.exports = pool;
+// Test connection
+pool.query('SELECT NOW()', (err) => {
+  if (err) {
+    console.error('❌ Database connection failed:', err.message);
+  }
+});
+
+export default pool;

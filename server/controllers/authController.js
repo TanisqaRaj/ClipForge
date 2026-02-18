@@ -1,10 +1,10 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const Session = require('../models/Session');
-const Token = require('../models/Token');
-const { sendVerificationEmail, sendPasswordResetEmail } = require('../utils/email');
-const { OAuth2Client } = require('google-auth-library');
-const logger = require('../utils/logger');
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
+import Session from '../models/Session.js';
+import Token from '../models/Token.js';
+import { sendVerificationEmail, sendPasswordResetEmail } from '../utils/email.js';
+import { OAuth2Client } from 'google-auth-library';
+import logger from '../utils/logger.js';
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -23,7 +23,7 @@ const generateRefreshToken = (userId) => {
 };
 
 // Signup
-exports.signup = async (req, res) => {
+export const signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
@@ -42,7 +42,7 @@ exports.signup = async (req, res) => {
     const verificationToken = await Token.create(user.id, 'verify', 24 * 60); // 24 hours
     
     // Generate OTP (for manual entry)
-    const otpToken = await Token.createOTP(user.id, 'verify', 15); // 15 minutes
+    const otpToken = await Token.createOTP(user.id, 'verify', 60); // 60 minutes
 
     console.log('📧 Sending verification email...');
     console.log('   Email:', email);
@@ -70,7 +70,7 @@ exports.signup = async (req, res) => {
 };
 
 // Login
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const clientIp = req.ip;
@@ -168,7 +168,7 @@ const trackFailedLogin = (email) => {
 };
 
 // Google OAuth
-exports.googleAuth = async (req, res) => {
+export const googleAuth = async (req, res) => {
   try {
     const { token } = req.body;
 
@@ -233,7 +233,7 @@ exports.googleAuth = async (req, res) => {
 };
 
 // Logout (single device)
-exports.logout = async (req, res) => {
+export const logout = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
 
@@ -250,7 +250,7 @@ exports.logout = async (req, res) => {
 };
 
 // Logout all devices
-exports.logoutAll = async (req, res) => {
+export const logoutAll = async (req, res) => {
   try {
     await Session.deleteAllByUserId(req.user.id);
     res.clearCookie('refreshToken');
@@ -262,7 +262,7 @@ exports.logoutAll = async (req, res) => {
 };
 
 // Refresh token
-exports.refreshToken = async (req, res) => {
+export const refreshToken = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
 
@@ -290,16 +290,21 @@ exports.refreshToken = async (req, res) => {
 };
 
 // Verify email
-exports.verifyEmail = async (req, res) => {
+export const verifyEmail = async (req, res) => {
   try {
     const { token } = req.body;
 
+    console.log('🔍 Verifying token:', token);
+
     // Find token
     const tokenRecord = await Token.findByToken(token, 'verify');
+    
+    console.log('📝 Token record found:', tokenRecord);
+    
     if (!tokenRecord) {
       return res.status(400).json({ message: 'Invalid or expired verification token' });
     }
-
+    
     // Verify email
     await User.verifyEmail(tokenRecord.user_id);
 
@@ -314,7 +319,7 @@ exports.verifyEmail = async (req, res) => {
 };
 
 // Resend verification email
-exports.resendVerification = async (req, res) => {
+export const resendVerification = async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -332,7 +337,7 @@ exports.resendVerification = async (req, res) => {
 
     // Generate new verification token and OTP
     const verificationToken = await Token.create(user.id, 'verify', 24 * 60);
-    const otpToken = await Token.createOTP(user.id, 'verify', 15);
+    const otpToken = await Token.createOTP(user.id, 'verify', 60); // 60 minutes
 
     console.log('📧 Resending verification email...');
     console.log('   Email:', email);
@@ -351,7 +356,7 @@ exports.resendVerification = async (req, res) => {
 };
 
 // Forgot password
-exports.forgotPassword = async (req, res) => {
+export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -378,7 +383,7 @@ exports.forgotPassword = async (req, res) => {
 };
 
 // Reset password
-exports.resetPassword = async (req, res) => {
+export const resetPassword = async (req, res) => {
   try {
     const { token, password } = req.body;
 
@@ -405,7 +410,7 @@ exports.resetPassword = async (req, res) => {
 };
 
 // Get current user
-exports.getCurrentUser = async (req, res) => {
+export const getCurrentUser = async (req, res) => {
   try {
     res.json({
       user: {

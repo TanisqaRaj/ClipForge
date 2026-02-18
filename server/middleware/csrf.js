@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+import crypto from 'crypto';
 
 // Simple CSRF token store (use Redis in production)
 const csrfTokens = new Map();
@@ -57,4 +57,4 @@ setInterval(() => {
   }
 }, 60 * 60 * 1000);
 
-module.exports = { csrfProtection, getCsrfToken };
+export { csrfProtection, getCsrfToken };
