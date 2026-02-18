@@ -20,7 +20,7 @@ function App() {
     if (data.videoUrl) {
       setVideo(data.videoUrl);
       setSubtitle(data.subtitleUrl);
-      setStatus("Download complete ✅");
+      setStatus("Download completed ✅");
     } else {
       setStatus("Error ❌");
     }
