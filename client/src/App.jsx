@@ -1,69 +1,96 @@
-import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Layout from './components/Layout';
+import DashboardLayout from './components/DashboardLayout';
+import ProtectedRoute from './components/ProtectedRoute';
+
+// Public Pages
+import Home from './pages/Home';
+import Pricing from './pages/Pricing';
+import Demo from './pages/Demo';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import Blog from './pages/Blog';
+import Terms from './pages/Terms';
+import Privacy from './pages/Privacy';
+
+// Auth Pages
+import Login from './pages/auth/Login';
+import Signup from './pages/auth/Signup';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
+import VerifyEmail from './pages/auth/VerifyEmail';
+
+// User Dashboard Pages
+import DashboardOverview from './pages/user/DashboardOverview';
+import Videos from './pages/user/Videos';
+import VideoDetails from './pages/user/VideoDetails';
+import Clips from './pages/user/Clips';
+import Scheduled from './pages/user/Scheduled';
+import Analytics from './pages/user/Analytics';
+import Subscription from './pages/user/Subscription';
+import Settings from './pages/user/Settings';
+
+// Admin Dashboard Pages
+import AdminDashboard from './pages/admin/AdminDashboard';
+import Users from './pages/admin/Users';
+import PlatformAnalytics from './pages/admin/PlatformAnalytics';
+import Plans from './pages/admin/Plans';
+
 function App() {
-  const [url, setUrl] = useState("");
-  const [status, setStatus] = useState("");
-  const [video, setVideo] = useState("");
-  const [subtitle, setSubtitle] = useState("");
-
-  const downloadVideo = async () => {
-    setStatus("Downloading...");
-    setVideo("");
-
-    const res = await fetch("http://127.0.0.1:5000/download", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url }),
-    });
-
-    const data = await res.json();
-
-    if (data.videoUrl) {
-      setVideo(data.videoUrl);
-      setSubtitle(data.subtitleUrl);
-      setStatus("Download complete ✅");
-    } else {
-      setStatus("Error ❌");
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center px-4">
-      <h1 className="text-3xl font-bold mb-6">YouTube Downloader</h1>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="pricing" element={<Pricing />} />
+            <Route path="demo" element={<Demo />} />
+            <Route path="about" element={<About />} />
+            <Route path="contact" element={<Contact />} />
+            <Route path="blog" element={<Blog />} />
+            <Route path="terms" element={<Terms />} />
+            <Route path="privacy" element={<Privacy />} />
+            <Route path="login" element={<Login />} />
+            <Route path="signup" element={<Signup />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="reset-password" element={<ResetPassword />} />
+            <Route path="verify-email" element={<VerifyEmail />} />
+          </Route>
+          
+          {/* User Dashboard Routes */}
+          <Route path="/" element={
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }>
+            <Route path="dashboard" element={<DashboardOverview />} />
+            <Route path="videos" element={<Videos />} />
+            <Route path="dashboard/videos/:videoId" element={<VideoDetails />} />
+            <Route path="clips" element={<Clips />} />
+            <Route path="scheduled" element={<Scheduled />} />
+            <Route path="analytics" element={<Analytics />} />
+            <Route path="subscription" element={<Subscription />} />
+            <Route path="settings" element={<Settings />} />
+          </Route>
 
-      <div className="flex w-full max-w-xl gap-2">
-        <input
-          className="flex-1 px-4 py-2 rounded text-black"
-          placeholder="Paste YouTube link..."
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-        />
-
-        <button
-          onClick={downloadVideo}
-          className="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Download
-        </button>
-      </div>
-
-      {status && <p className="mt-4 text-lg">{status}</p>}
-
-      {video && (
-        <video controls className="mt-6 w-full max-w-3xl rounded">
-          <source src={video} type="video/mp4" />
-
-          {subtitle && (
-            <track
-              src={subtitle}
-              kind="subtitles"
-              srcLang="en"
-              label="English"
-              default
-            />
-          )}
-        </video>
-      )}
-    </div>
+          {/* Admin Dashboard Routes */}
+          <Route path="/admin" element={
+            <ProtectedRoute requireAdmin>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }>
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="users" element={<Users />} />
+            <Route path="analytics" element={<PlatformAnalytics />} />
+            <Route path="plans" element={<Plans />} />
+            <Route path="integrations" element={<Settings />} />
+            <Route path="logs" element={<Settings />} />
+          </Route>
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 

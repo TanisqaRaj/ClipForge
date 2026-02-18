@@ -28,10 +28,14 @@ storage/
 videos/
 clips/
 subtitles/
+downloads/
 *.mp4
 *.webm
 *.mkv
 *.srt
+*.vtt
+*.avi
+*.mov
 
 # =========================
 # Build folders
@@ -53,3 +57,11 @@ Thumbs.db
 logs/
 *.log
 .venv
+
+# =========================
+# Test and Documentation Files (Development Only)
+# =========================
+TEST-*.html
+*-STATUS*.md
+*-TROUBLESHOOTING.md
+test_*.py
