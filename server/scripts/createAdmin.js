@@ -1,6 +1,8 @@
-const User = require('../models/User');
-const pool = require('../config/database');
-require('dotenv').config();
+import User from '../models/User.js';
+import pool from '../config/database.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 async function createAdmin() {
   try {

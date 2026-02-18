@@ -1,5 +1,10 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Create logs directory if it doesn't exist
 const logsDir = path.join(__dirname, '../logs');
@@ -66,4 +71,4 @@ const logger = {
   }
 };
 
-module.exports = logger;
+export default logger;

@@ -111,7 +111,7 @@ const validateResetPassword = (req, res, next) => {
   next();
 };
 
-module.exports = {
+export {
   validateSignup,
   validateLogin,
   validateEmailOnly,

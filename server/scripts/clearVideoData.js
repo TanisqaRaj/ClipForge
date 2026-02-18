@@ -1,4 +1,4 @@
-const pool = require('../config/database');
+import pool from '../config/database.js';
 
 async function clearVideoData() {
   try {

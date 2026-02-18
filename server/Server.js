@@ -1,15 +1,17 @@
-const express = require('express');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-const helmet = require('helmet');
-const mongoSanitize = require('express-mongo-sanitize');
-const hpp = require('hpp');
-require('dotenv').config();
+import express from 'express';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
+import mongoSanitize from 'express-mongo-sanitize';
+import hpp from 'hpp';
+import dotenv from 'dotenv';
 
-const authRoutes = require('./routes/auth');
-const videoRoutes = require('./routes/video');
-const clipRoutes = require('./routes/clip');
-const { setupCleanupJobs } = require('./utils/cleanup');
+import authRoutes from './routes/auth.js';
+import videoRoutes from './routes/video.js';
+import clipRoutes from './routes/clip.js';
+import { setupCleanupJobs } from './utils/cleanup.js';
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -80,4 +82,4 @@ app.listen(PORT, () => {
   console.log('✓ Cleanup jobs scheduled');
 });
 
-module.exports = app;
+export default app;

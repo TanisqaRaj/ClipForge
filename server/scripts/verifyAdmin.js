@@ -1,5 +1,7 @@
-const User = require('../models/User');
-require('dotenv').config();
+import User from '../models/User.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 async function verifyAdmin() {
   try {

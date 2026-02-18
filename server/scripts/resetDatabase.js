@@ -1,6 +1,11 @@
-const pool = require('../config/database');
-const fs = require('fs');
-const path = require('path');
+import pool from '../config/database.js';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 async function resetDatabase() {
   try {

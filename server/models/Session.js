@@ -1,4 +1,4 @@
-const pool = require('../config/database');
+import pool from '../config/database.js';
 
 class Session {
   // Create a new session
@@ -46,4 +46,4 @@ class Session {
   }
 }
 
-module.exports = Session;
+export default Session;

@@ -1,12 +1,20 @@
-const express = require('express');
+import express from 'express';
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
+import { authenticate } from '../middleware/authMiddleware.js';
+import Video from '../models/Video.js';
+import Clip from '../models/Clip.js';
+import axios from 'axios';
+
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const router = express.Router();
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs').promises;
-const { authenticate } = require('../middleware/authMiddleware');
-const Video = require('../models/Video');
-const Clip = require('../models/Clip');
-const axios = require('axios');
+const fsPromises = fs.promises;
 
 // Configure multer for video uploads
 const storage = multer.diskStorage({
@@ -331,7 +339,7 @@ router.delete('/:videoId', authenticate, async (req, res) => {
 
     // Delete video file
     try {
-      await fs.unlink(video.file_path);
+      await fsPromises.unlink(video.file_path);
     } catch (err) {
       console.error('Error deleting video file:', err);
     }
@@ -346,4 +354,4 @@ router.delete('/:videoId', authenticate, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

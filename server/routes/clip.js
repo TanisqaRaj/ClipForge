@@ -1,8 +1,9 @@
-const express = require('express');
+import express from 'express';
+import { authenticate } from '../middleware/authMiddleware.js';
+import Clip from '../models/Clip.js';
+import Video from '../models/Video.js';
+
 const router = express.Router();
-const { authenticate } = require('../middleware/authMiddleware');
-const Clip = require('../models/Clip');
-const Video = require('../models/Video');
 
 // Get user's clips
 router.get('/my-clips', authenticate, async (req, res) => {
@@ -106,4 +107,4 @@ router.delete('/:clipId', authenticate, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

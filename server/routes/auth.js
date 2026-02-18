@@ -1,10 +1,11 @@
-const express = require('express');
+import express from 'express';
+import * as authController from '../controllers/authController.js';
+import { authenticate } from '../middleware/authMiddleware.js';
+import { validateSignup, validateLogin, validateResetPassword } from '../middleware/validator.js';
+import createRateLimiter from '../middleware/rateLimiter.js';
+import { getCsrfToken } from '../middleware/csrf.js';
+
 const router = express.Router();
-const authController = require('../controllers/authController');
-const { authenticate } = require('../middleware/authMiddleware');
-const { validateSignup, validateLogin, validateResetPassword } = require('../middleware/validator');
-const createRateLimiter = require('../middleware/rateLimiter');
-const { getCsrfToken } = require('../middleware/csrf');
 
 // Rate limiters
 const authLimiter = createRateLimiter({
@@ -43,4 +44,4 @@ router.post('/logout', authenticate, authController.logout);
 router.post('/logout-all', authenticate, authController.logoutAll);
 router.get('/me', authenticate, authController.getCurrentUser);
 
-module.exports = router;
+export default router;

@@ -1,4 +1,4 @@
-const nodemailer = require('nodemailer');
+import nodemailer from 'nodemailer';
 
 // Create email transporter
 const createTransporter = () => {
@@ -14,7 +14,7 @@ const createTransporter = () => {
 };
 
 // Send verification email
-exports.sendVerificationEmail = async (email, token, otp) => {
+export const sendVerificationEmail = async (email, token, otp) => {
   const transporter = createTransporter();
   const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${token}`;
 
@@ -91,7 +91,7 @@ exports.sendVerificationEmail = async (email, token, otp) => {
 };
 
 // Send password reset email
-exports.sendPasswordResetEmail = async (email, token) => {
+export const sendPasswordResetEmail = async (email, token) => {
   const transporter = createTransporter();
   const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
 

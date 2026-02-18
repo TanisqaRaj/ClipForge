@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
 
 // Verify JWT token and attach user to request
 const authenticate = async (req, res, next) => {
@@ -53,8 +53,4 @@ const requireEmailVerified = (req, res, next) => {
   next();
 };
 
-module.exports = {
-  authenticate,
-  requireAdmin,
-  requireEmailVerified
-};
+export { authenticate, requireAdmin, requireEmailVerified };

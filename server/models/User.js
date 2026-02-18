@@ -1,5 +1,5 @@
-const pool = require('../config/database');
-const bcrypt = require('bcryptjs');
+import pool from '../config/database.js';
+import bcrypt from 'bcryptjs';
 
 class User {
   // Create a new user
@@ -72,4 +72,4 @@ class User {
   }
 }
 
-module.exports = User;
+export default User;
